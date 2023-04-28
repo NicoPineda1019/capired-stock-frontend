@@ -1,0 +1,1 @@
+# capired-stock-frontend
