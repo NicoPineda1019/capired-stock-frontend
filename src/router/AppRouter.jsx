@@ -6,6 +6,7 @@ import { Auth } from '../context/auth'
 import { useEffect } from 'react'
 import { getCurrentUser } from '../auth/authService'
 import PrivateRouter from './PrivateRouter'
+import Loading from '../components/Loading'
 
 const AppRouter = () => {
   const [authContext, setAuthContext] = useState(null)
@@ -19,6 +20,7 @@ const AppRouter = () => {
   return (
     <BrowserRouter>
       <Auth.Provider value={authContext}>
+        <Loading />
         <Routes>
           <Route path='/*' element={
             <PrivateRouter>

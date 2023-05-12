@@ -1,0 +1,23 @@
+._stock-container {
+    display: grid;
+    grid-template-columns: 1fr 10fr;
+    font-size: 18px;
+    font-weight: 500;
+    background-color: rgb(13 110 253 / 25%);
+}
+
+._stock-content {
+    padding: 15px;
+}
+
+._stock-box-summary {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 2fr 1fr 1fr 1fr;
+    margin-top: 20px;
+    width: 100%;
+    height: 200px;
+    border-radius: 12px;
+    background-color: rgba(230, 235, 240, .7);
+    border: 2px solid rgba(230, 235, 240, .7);
+}
