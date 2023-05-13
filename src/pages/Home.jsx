@@ -1,70 +1,84 @@
-import React, { useContext } from 'react'
-import { Auth } from '../context/auth'
-import { useEffect } from 'react'
-import SideBar from '../components/SideBar'
-import Table from '../components/Table'
-import Box from '@mui/material/Box';
-import Tab from '@mui/material/Tab';
-import TabContext from '@mui/lab/TabContext';
-import TabList from '@mui/lab/TabList';
-import TabPanel from '@mui/lab/TabPanel';
-import { useState } from 'react'
+import React, { useContext } from "react";
+import { Auth } from "../context/auth";
+import { useEffect } from "react";
+import SideBar from "../components/SideBar";
+import Table from "../components/Table";
+import Box from "@mui/material/Box";
+import Tab from "@mui/material/Tab";
+import TabContext from "@mui/lab/TabContext";
+import TabList from "@mui/lab/TabList";
+import { useState } from "react";
+import { Chip, Stack } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setCategoryTab,
+  setColsTable,
+  setStatusTab,
+} from "../store/tableStock/tableStockSlice";
+import { mapColsTableStock } from "../utils/map";
+import { getStockByStatus } from "../store/tableStock/stockThunk";
 
 const Home = () => {
-  const auth = useContext(Auth)
-  const [value, setValue] = useState('1')
-  console.log('auth', auth)
+  const auth = useContext(Auth);
+  const dispatch = useDispatch();
+  const { serializableInfo, noSerializableInfo, categoryTab, statusTab, numberPage, currentPage, loading } =
+    useSelector((state) => state.tableStock);
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
+  // console.log('auth', auth)
+
+  const handleCategoryTab = (e, newValue) => {
+    dispatch(setCategoryTab(newValue));
   };
+  const handleStatusTab = (e, newValue) => {
+    dispatch(setStatusTab(newValue));
+  };
+
   useEffect(() => {
-/*     fetch('https://8oxhxp1tr0.execute-api.us-east-1.amazonaws.com/dev/stock/serializable', {
-      headers: {
-        Authorization: auth.sesion.accessToken.jwtToken
-      }
-    })
-      .then(response => response.json())
-      .then(data => console.log(data));
- */  }, [])
+    dispatch(getStockByStatus(currentPage, statusTab))
+  }, [currentPage, statusTab, dispatch]);
 
   return (
-    <section className='_stock-container'>
+    <section className="_stock-container">
       <SideBar />
-      <div className='_stock-content'>
-        <div className='_stock-box-summary'>
-          <div></div>
-          <div>Stock</div>
-          <div>Asignado</div>
-          <div>Consumido</div>
-          <div>Equipos</div>
-          <div>45</div>
-          <div>25</div>
-          <div>14</div>
-          <div>Cable</div>
-          <div>45</div>
-          <div>25</div>
-          <div>14</div>
-          <div>Material</div>
-          <div>45</div>
-          <div>25</div>
-          <div>14</div>
+      <div className="_stock-content">
+        <div style={{ marginTop: "20px", width: '90%' }}>
+          <Box className="_table-header">
+            <TabContext value={categoryTab}>
+              <Box sx={{ borderBottom: 1 }}>
+                <TabList
+                  onChange={handleCategoryTab}
+                  indicatorColor="secondary"
+                  textColor="inherit"
+                >
+                  <Tab label="SERIALIZABLE" value="1" />
+                  <Tab label="NO SERIALIZABLE" value="2" />
+                </TabList>
+              </Box>
+            </TabContext>
+          </Box>
+          <Box className="_table-header">
+            <TabContext value={statusTab}>
+              <Box sx={{ borderBottom: 1 }}>
+                <TabList
+                  onChange={handleStatusTab}
+                  indicatorColor="secondary"
+                  textColor="inherit"
+                >
+                  <Tab label="STOCK" value="1" />
+                  <Tab label="ASIGNADO" value="2" />
+                  <Tab label="CONSUMIDO" value="3" />
+                </TabList>
+              </Box>
+            </TabContext>
+          </Box>
+            <Table
+              cols={mapColsTableStock(categoryTab, statusTab)}
+              rows={categoryTab === "1" ? serializableInfo : noSerializableInfo}
+              numberPage={numberPage}
+              currentPage={currentPage}
+              loading={loading}
+            />
         </div>
-        <Box sx={{ width: '100%', typography: 'body1' }}>
-          <TabContext value={value}>
-            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-              <TabList onChange={handleChange} aria-label="lab API tabs example">
-                <Tab label="Inventario" value="1" />
-                <Tab label="Salida" value="2" />
-              </TabList>
-            </Box>
-            <TabPanel value="1">
-            </TabPanel>
-            <TabPanel value="2">Item Two</TabPanel>
-          </TabContext>
-        </Box>
-        <Table />
-
       </div>
       {/*       <button onClick={() => {
         auth?.cognitoUser?.signOut()
@@ -73,8 +87,9 @@ const Home = () => {
           onFailure: () => ({})
         })}
         }>Salir</button>
- */}    </section>
-  )
-}
+ */}{" "}
+    </section>
+  );
+};
 
-export default Home
+export default Home;
