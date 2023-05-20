@@ -1,5 +1,27 @@
 import { Chip, Stack } from "@mui/material";
+const moment = require('moment-timezone');
 
+export const mapPostStock = (items) => {
+  const dateNow = moment().tz("America/Bogota")
+  const uploadDateTime = dateNow.format("YYYY-MM-DD HH:mm:ss")
+  const updateDate = dateNow.format("YYYY-MM-DD")
+  const updateTime = dateNow.format("HH:mm:ss")
+  return items.map((item) => ({
+    serial: item.serial,
+    idMaterial: item.id,
+    fechaCargue: uploadDateTime,
+    fechaActualizacion: updateDate,
+    horaActualizacion: updateTime,
+    idEstado: 1
+  }))
+};
+
+export const mapMaterials = (items) => {
+  return items.map((item) => ({
+    id: item.idMaterial,
+    label: item.nombre
+  }))
+}
 export const mapColsTableStock = (category, _status) => {
   const isSerializable = category === "1";
   const isStock = _status === "1";

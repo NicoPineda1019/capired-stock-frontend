@@ -1,12 +1,19 @@
-import React from 'react'
-import Modal from 'react-bootstrap/Modal';
-import { useSelector } from 'react-redux';
+import { Backdrop, CircularProgress } from "@mui/material";
+import React from "react";
+import Modal from "react-bootstrap/Modal";
+import { useSelector } from "react-redux";
 
 const Loading = () => {
-    const { show } = useSelector(state => state.loading)
+  const { show } = useSelector((state) => state.loading);
 
-    return (
-        <Modal
+  return (
+    <Backdrop
+      sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+      open={show}
+    >
+      <CircularProgress color="inherit" size={80}/>
+    </Backdrop>
+    /*         <Modal
             show={show}
             size="sm"
             aria-labelledby="contained-modal-title-vcenter"
@@ -42,7 +49,8 @@ const Loading = () => {
                 </div>
             </Modal.Body>
         </Modal>
-    )
-}
+ */
+  );
+};
 
-export default Loading
+export default Loading;

@@ -1,0 +1,16 @@
+._uploadStock-container {
+    padding: 15px;
+    background-color: white;
+    width: 80%;
+    border-radius: 12px;
+    border: 2px solid rgba(230, 235, 240, .7);
+    height: 90vh;
+}
+._uploadStock-form-row {
+    flex-direction: row !important;
+    margin-bottom: 10px !important;
+    gap: 10px;
+    flex-wrap: wrap;
+    width: 90%;
+    padding: 20px;
+}

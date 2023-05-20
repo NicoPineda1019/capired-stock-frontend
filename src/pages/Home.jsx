@@ -38,9 +38,7 @@ const Home = () => {
   }, [currentPage, statusTab, dispatch]);
 
   return (
-    <section className="_stock-container">
-      <SideBar />
-      <div className="_stock-content">
+    <section className="_stock-content">
         <div style={{ marginTop: "20px", width: '90%' }}>
           <Box className="_table-header">
             <TabContext value={categoryTab}>
@@ -79,7 +77,7 @@ const Home = () => {
               loading={loading}
             />
         </div>
-      </div>
+
       {/*       <button onClick={() => {
         auth?.cognitoUser?.signOut()
         auth?.cognitoUser?.globalSignOut({
