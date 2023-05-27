@@ -1,7 +1,6 @@
 import React, { useContext, useState } from "react";
 import { Routes, Route, BrowserRouter, Navigate } from "react-router-dom";
 import Login from "../auth/Login";
-import Home from "../pages/Home";
 import { Auth } from "../context/auth";
 import { useEffect } from "react";
 import { getCurrentUser } from "../auth/authService";
@@ -9,6 +8,7 @@ import PrivateRouter from "./PrivateRouter";
 import Loading from "../components/Loading";
 import UploadStock from "../pages/UploadStock";
 import MenuContent from "../layouts/MenuContent";
+import StockDetail from "../pages/StockDetail";
 
 const AppRouter = () => {
   const [authContext, setAuthContext] = useState(null);
@@ -30,7 +30,7 @@ const AppRouter = () => {
               <PrivateRouter>
                 <Routes>
                   <Route element={<MenuContent />}>
-                    <Route path="/home" element={<Home />} />
+                    <Route path="/stock" element={<StockDetail />} />
                     <Route path="/upload" element={<UploadStock />} />
                   </Route>
                 </Routes>

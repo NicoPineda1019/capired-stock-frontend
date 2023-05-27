@@ -68,10 +68,11 @@ nav .list li {
     cursor: pointer;
     border-radius: 8px;
     transition: .4s ease-in-out;
+    height: 70px;
 }
 
 nav .list li:hover {
-    background: rgba(230, 235, 240, .4);
+    background: #76a7f5;
 }
 
 nav .list li.active {
@@ -132,19 +133,19 @@ nav:hover .list span {
 }
 
 nav:hover .list li:nth-child(1) span {
-    animation-delay: .5s;
+    animation-delay: .4s;
 }
 
 nav:hover .list li:nth-child(2) span {
-    animation-delay: .6s;
+    animation-delay: .5s;
 }
 
 nav:hover .list li:nth-child(3) span {
-    animation-delay: .7s;
+    animation-delay: .6s;
 }
 
 nav:hover .list li:nth-child(4) span {
-    animation-delay: .8s;
+    animation-delay: .7s;
 }
 
 nav:hover .list li:nth-child(5) span {

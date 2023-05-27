@@ -18,7 +18,7 @@ const Login = ({ setAuth }) => {
     }
 
     useEffect(() => {
-        if (auth?.sesion?.isValid()) navigate('/home')
+        if (auth?.sesion?.isValid()) navigate('/stock')
     }, [auth, navigate])
     useEffect(() => {
       if (error) {
