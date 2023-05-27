@@ -1,4 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit'
+import assignStockSlice from './assignStock/assignStockSlice'
 import loadingReducer from './loading/loadingSlice'
 import loginReducer from './login/loginSlice'
 import tableStockSlice from './tableStock/tableStockSlice'
@@ -9,6 +10,7 @@ export default configureStore({
     loading: loadingReducer,
     login: loginReducer,
     tableStock: tableStockSlice,
-    uploadStock: uploadStockSlice
+    uploadStock: uploadStockSlice,
+    assignStock: assignStockSlice
   },
 })

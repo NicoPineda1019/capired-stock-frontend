@@ -1,4 +1,5 @@
 import { Chip, Stack } from "@mui/material";
+import { updateItemsSelected } from "../store/assignStock/assignStockSlice";
 const moment = require('moment-timezone');
 
 export const mapPostStock = (items) => {
@@ -8,7 +9,8 @@ export const mapPostStock = (items) => {
   const updateTime = dateNow.format("HH:mm:ss")
   return items.map((item) => ({
     serial: item.serial,
-    idMaterial: item.id,
+    cantidad: item.cantidad,
+    idMaterial: item.id?.id,
     fechaCargue: uploadDateTime,
     fechaActualizacion: updateDate,
     horaActualizacion: updateTime,
@@ -16,11 +18,53 @@ export const mapPostStock = (items) => {
   }))
 };
 
+export const mapUpdateStock = (items, status, userId) => {
+  const dateNow = moment().tz("America/Bogota")
+  const updateDate = dateNow.format("YYYY-MM-DD")
+  const updateTime = dateNow.format("HH:mm:ss")
+  const ids = items.map((item) => item.id).join(",");
+  return {
+    fechaActualizacion: updateDate,
+    horaActualizacion: updateTime,
+    idEstado: status,
+    idUsuario: userId,
+    id: ids
+  }
+}
 export const mapMaterials = (items) => {
-  return items.map((item) => ({
-    id: item.idMaterial,
-    label: item.nombre
+  const materials = {
+    serializable: [],
+    noSerializable: []
+  }
+  for (const item of items) {
+    const newObject = {
+      id: item.idMaterial,
+      label: item.nombre
+    }
+    if (item.categoria === "EQUIPOS") materials.serializable.push(newObject)
+    else materials.noSerializable.push(newObject)
+  }
+  return materials
+}
+
+export const mapUsers = (users) => {
+  return users.map((user) => ({
+    id: user.id,
+    label: user.nombre
   }))
+}
+
+export const mapItemsToAssign = (idsSelected) => {
+  return async (dispatch,getState) => {
+    const { serializableInfo } = getState().tableStock
+    const { stockItemsSelected } = getState().assignStock
+      const newArray = idsSelected.map((id) => {
+        const keepId = stockItemsSelected.find((item) => item.id === id)
+        if (keepId) return keepId
+        return serializableInfo.find((item) => item.id === id)
+      })
+      dispatch(updateItemsSelected(newArray))
+  }
 }
 export const mapColsTableStock = (category, _status) => {
   const isSerializable = category === "1";
@@ -60,7 +104,7 @@ export const mapColsTableStock = (category, _status) => {
           cellClassName: cellClass,
         }
       : {
-          field: "cant",
+          field: "cantidad",
           headerName: "Cantidad",
           width: 160,
           headerClassName: headerClass,

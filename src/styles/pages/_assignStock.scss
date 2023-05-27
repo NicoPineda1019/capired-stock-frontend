@@ -1,0 +1,7 @@
+._assignStock-container {
+ @extend ._containers-generic;
+}
+._assignStock-form-row {
+    @extend ._uploadStock-form-row;
+    width: 100%;
+} 

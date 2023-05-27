@@ -16,6 +16,9 @@ export const tableStockSlice = createSlice({
     setSerializableInfo: (state, action) => {
       state.serializableInfo = [...action.payload]
     },
+    setNoSerializableInfo: (state, action) => {
+      state.noSerializableInfo = [...action.payload]
+    },
     setCategoryTab: (state, action) => {
         state.categoryTab = action.payload
     },
@@ -38,6 +41,6 @@ export const tableStockSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { setSerializableInfo, setCategoryTab, setStatusTab, setColsTable, setNumberPage, setCurrentPage, setLoading} = tableStockSlice.actions
+export const { setSerializableInfo, setCategoryTab, setStatusTab, setColsTable, setNumberPage, setCurrentPage, setLoading, setNoSerializableInfo} = tableStockSlice.actions
 
 export default tableStockSlice.reducer

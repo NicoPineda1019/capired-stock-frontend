@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import TextField from "@mui/material/TextField";
 import {
   Autocomplete,
@@ -10,8 +10,7 @@ import {
   IconButton,
   InputLabel,
   OutlinedInput,
-  Tab,
-  Tabs,
+  Tab
 } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
 import UploadIcon from "@mui/icons-material/Upload";
@@ -23,25 +22,21 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   addItemNoSerializableStock,
   addItemSerializableStock,
-  deleteItemNoSerializableStock,
   deleteItemSerializableStock,
+  resetScannerValue,
   setCategory,
-  setItemNoSerializableStock,
   setItemSerializableStock,
+  setMaterial,
+  setScannerValue,
   updateItemSerializableStock,
 } from "../store/uploadStock/uploadStock";
 import {
   getMaterials,
   uploadStock,
 } from "../store/uploadStock/uploadStockThunk";
-import { openLoading } from "../store/loading/loadingSlice";
 import TabContext from "@mui/lab/TabContext/TabContext";
-import TabList from "@mui/lab/TabList/TabList";
+import TabList from "@mui/lab/TabList";
 
-const options = [
-  { label: "SWITCH DGS-105 5P 10/100/1000 DLIK", id: 1 },
-  { label: "DECO 2", id: 1 },
-];
 const buttonSx = {
   ...{
     bgcolor: green[500],
@@ -55,7 +50,7 @@ const UploadStock = () => {
 
   const { serializableStock, noSerializableStock, checkLoading, category } =
     useSelector((state) => state.uploadStock);
-
+  const [enableUpload, setEnableUpload] = useState(false);
   /*   const handleKey = (e) => {
     if (!(e.target.tagName === "BODY")) return;
     dispatch(
@@ -68,15 +63,14 @@ const UploadStock = () => {
   }; */
   const handleKey = useCallback(
     (e) => {
-      console.log(category);
       if (!(e.target.tagName === "BODY" && category === "1")) return;
-      dispatch(
-        addItemSerializableStock([
-          {
-            serial: e.key,
-          },
-        ])
-      );
+      // console.log(e);
+      if (e.code === "Enter") {
+        dispatch(addItemSerializableStock());
+        dispatch(resetScannerValue());
+        return;
+      }
+      dispatch(setScannerValue(e.key.replace("Shift", "")));
     },
     [dispatch, category]
   );
@@ -86,21 +80,48 @@ const UploadStock = () => {
   };
 
   const addItemNoSerializable = () => {
-    dispatch(addItemSerializableStock([{
-      cantidad: 0
-    }]))
-
-  }
-
+    dispatch(
+      addItemNoSerializableStock([
+        {
+          cantidad: 0,
+        },
+      ])
+    );
+  };
   useEffect(() => {
-    // dispatch(getMaterials())
+    const materialsInStorage = JSON.parse(sessionStorage.getItem('materials'));
+    if (materialsInStorage?.length > 0) dispatch(setMaterial(materialsInStorage))
+    else dispatch(getMaterials())
+  }, [dispatch])
+  
+  useEffect(() => {
     document.addEventListener("keydown", handleKey);
-    if (category === "1") dispatch(setItemSerializableStock([]));
-    if (category === "2") dispatch(setItemNoSerializableStock([]));
+    if (category) dispatch(setItemSerializableStock([]));
     return () => {
       document.removeEventListener("keydown", handleKey);
     };
-  }, [dispatch, category]);
+  }, [dispatch, category, handleKey]);
+
+  useEffect(() => {
+    let isValidUpload = false;
+    const hasSerial = category === "1";
+    for (const item of serializableStock) {
+      const validId = !!item.id?.id;
+      let validValue = false;
+      if (hasSerial) {
+        validValue = !!item.serial
+      } else {
+        validValue = !!item.cantidad
+      }
+      if (!validId || !validValue) {
+        isValidUpload = false
+        continue;
+      }
+      if (validId && validValue) isValidUpload = true;
+    };
+    setEnableUpload(isValidUpload);
+  }, [category, serializableStock])
+  
 
   return (
     <section className="_uploadStock-container">
@@ -122,7 +143,10 @@ const UploadStock = () => {
         }}
       >
         {category === "2" && (
-          <Box sx={{ "& > :not(style)": { m: 1 } }} onClick={addItemNoSerializable}>
+          <Box
+            sx={{ "& > :not(style)": { m: 1 } }}
+            onClick={addItemNoSerializable}
+          >
             <Fab color="primary" aria-label="add">
               <AddIcon />
             </Fab>
@@ -151,6 +175,7 @@ const UploadStock = () => {
         endIcon={<UploadIcon />}
         onClick={() => dispatch(uploadStock())}
         className="_uploadStock-upload-btn"
+        disabled={!enableUpload}
       >
         Cargar
       </Button>
@@ -166,7 +191,6 @@ const UploadStock = () => {
 export default UploadStock;
 
 const RowForm = ({ data, postion, category }) => {
-  console.log("data", data)
   const dispatch = useDispatch();
   const { materials } = useSelector((state) => state.uploadStock);
 
@@ -189,8 +213,6 @@ const RowForm = ({ data, postion, category }) => {
     );
   };
   const handleChangeAutoComplete = (e, newValue, pos) => {
-    console.log("Cambio")
-
     dispatch(
       updateItemSerializableStock({
         ...data,
@@ -202,10 +224,6 @@ const RowForm = ({ data, postion, category }) => {
   const deleteItemSerializable = (pos) => {
     dispatch(deleteItemSerializableStock(pos));
   };
-  const deleteItemNoSerializable = (pos) => {
-    console.log(pos)
-    dispatch(deleteItemNoSerializableStock(pos));
-  };
   return (
     <FormControl className="_uploadStock-form-row">
       <div style={{ width: "30%" }}>
@@ -216,18 +234,23 @@ const RowForm = ({ data, postion, category }) => {
           autoComplete="off"
           id="component-outlined"
           label={category === "1" ? "Serial" : "Cantidad"}
-          onChange={(e) => category === "1" ? handleChange(e, postion): handleChangeNoSerializable(e, postion)}
-          value={category === "1" ? data.serial : data.cantidad}
+          type={category === "1" ? "text" : "number"}
+          onChange={(e) =>
+            category === "1"
+              ? handleChange(e, postion)
+              : handleChangeNoSerializable(e, postion)
+          }
+          value={category === "1" ? data.serial ?? "" : data.cantidad ?? 0}
           sx={{ width: "100%" }}
         />
       </div>
       <Autocomplete
         id="combo-box-demo"
         value={data.id ?? null}
-        options={options}
+        options={materials[category === "1" ? "serializable" : "noSerializable"]}
         sx={{ width: "40%" }}
-        onChange={(e, nV) =>handleChangeAutoComplete(e, nV, postion)}
-        renderInput={(params) => <TextField {...params} label="Equipo" />}
+        onChange={(e, nV) => handleChangeAutoComplete(e, nV, postion)}
+        renderInput={(params) => <TextField {...params} label={category === "1" ? "Equipo" : "Material"} />}
       />
       <IconButton
         color="primary"

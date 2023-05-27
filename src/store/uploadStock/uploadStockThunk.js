@@ -6,9 +6,9 @@ import { setCheckLoading, setItemSerializableStock, setMaterial } from "./upload
 
 export const uploadStock = () => {
     return async (dispatch, getState) => {
-        const { serializableStock } = getState().uploadStock
+        const { serializableStock, category } = getState().uploadStock
         const body = mapPostStock(serializableStock)
-        const path = '/stock/stock-serializable'
+        const path = category === "1" ? '/stock/stock-serializable' : category === "2" ? "/stock/stock-no-serializable" : "";
         dispatch(openLoading())
         await postStock(path, body)
             .then((resp) => console.log(resp))
@@ -29,7 +29,11 @@ export const getMaterials = () => {
         const path = '/stock/material'
         dispatch(openLoading())
         await getStock(path)
-            .then((resp) => dispatch(setMaterial(mapMaterials(resp.data))))
+            .then((resp) => {
+                const dataMapped = mapMaterials(resp.data)
+                dispatch(setMaterial(dataMapped))
+                sessionStorage.setItem('materials', JSON.stringify(dataMapped))
+            })
             .catch((err) => console.error(err))
             .finally(() => dispatch(closeLoading()))
     }

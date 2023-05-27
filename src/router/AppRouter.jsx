@@ -9,6 +9,7 @@ import Loading from "../components/Loading";
 import UploadStock from "../pages/UploadStock";
 import MenuContent from "../layouts/MenuContent";
 import StockDetail from "../pages/StockDetail";
+import AssignStock from "../pages/AssignStock";
 
 const AppRouter = () => {
   const [authContext, setAuthContext] = useState(null);
@@ -31,6 +32,7 @@ const AppRouter = () => {
                 <Routes>
                   <Route element={<MenuContent />}>
                     <Route path="/stock" element={<StockDetail />} />
+                    <Route path="/assign" element={<AssignStock />} />
                     <Route path="/upload" element={<UploadStock />} />
                   </Route>
                 </Routes>
