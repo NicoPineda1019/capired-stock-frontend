@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   TextField,
   FormControl,
@@ -10,17 +10,20 @@ import ClearIcon from "@mui/icons-material/Clear";
 import SendIcon from "@mui/icons-material/Send";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  deleteItemSelected,
   setUserAssign,
   setUsers,
   updateInfoItemsSelected,
 } from "../store/assignStock/assignStockSlice";
 import { getUsers, updateStockSerializable } from "../store/assignStock/assignStockThunk";
+import Toast from "../components/Toast";
 
 const AssignStock = () => {
   const dispatch = useDispatch();
-  const { stockItemsSelected, users } = useSelector(
+  const { stockItemsSelected, users, userAssign } = useSelector(
     (state) => state.assignStock
   );
+  const [enableAssign, setEnableAssign] = useState(false);
 
   const handleChangeAutoComplete = (e, newValue) => {
     dispatch(setUserAssign(newValue))
@@ -28,10 +31,21 @@ const AssignStock = () => {
 
   useEffect(() => {
     const usersInStorage = JSON.parse(sessionStorage.getItem("users"));
-    if (Object.keys(usersInStorage).length > 0)
+    if (usersInStorage)
       dispatch(setUsers(usersInStorage));
     else dispatch(getUsers());
   }, [dispatch]);
+
+  useEffect(() => {
+    let isValidItems = false;
+    stockItemsSelected.forEach(item => {
+      isValidItems = ((item.serial === item.confirmationSerial ) || false)
+      if (!isValidItems) return;
+    });
+    const isValidAssign = isValidItems && !!userAssign.id
+    setEnableAssign(isValidAssign);
+  }, [stockItemsSelected, userAssign, setEnableAssign])
+  
 
   return (
     <section className="_assignStock-container">
@@ -46,7 +60,12 @@ const AssignStock = () => {
       {stockItemsSelected.map((item, idx) => (
         <RowForm key={idx} data={item} />
       ))}
+      <Toast
+        containerStyles={{ position: "relative", top: "-140px" }}
+        alertStyles={{ justifyContent: "center", width: "60%", margin: "auto" }}
+      />
       <Button
+        disabled={!enableAssign}
         onClick={() => dispatch(updateStockSerializable())}
         variant="contained"
         endIcon={<SendIcon />}>
@@ -69,6 +88,9 @@ const RowForm = ({ data }) => {
       })
     );
   };
+  const deleteItem = (id) => {
+    dispatch(deleteItemSelected({id}))
+  }
   return (
     <FormControl className="_assignStock-form-row" sx={{ marginTop: "20px" }}>
       <TextField
@@ -102,7 +124,10 @@ const RowForm = ({ data }) => {
           onChange={(e) => handleInputChange(e, data)}
         />
       </div>
-      <IconButton color="primary">
+      <IconButton 
+        onClick={() => deleteItem(data.id)}
+        color="primary"
+        >
         <ClearIcon />
       </IconButton>
     </FormControl>

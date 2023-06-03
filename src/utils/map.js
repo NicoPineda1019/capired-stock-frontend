@@ -149,13 +149,13 @@ export const mapColsTableStock = (category, _status) => {
     });
   }
   cols.push({
-    field: "fecha_actualizacion",
+    field: "fecha_actualización",
     headerName: "Fecha Actualizacion",
-    width: 180,
+    width: 220,
     headerClassName: headerClass,
     cellClassName: cellClass,
     valueGetter: (params) =>
-      `${params.row.fecha_actualizacion || ""} ${
+      `${moment(params.row.fecha_actualizacion).format('YYYY-MM-DD') || ""} ${
         params.row.hora_actualizacion || ""
       }`,
   });

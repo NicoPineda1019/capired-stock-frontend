@@ -10,7 +10,7 @@ import {
   IconButton,
   InputLabel,
   OutlinedInput,
-  Tab
+  Tab,
 } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
 import UploadIcon from "@mui/icons-material/Upload";
@@ -36,6 +36,7 @@ import {
 } from "../store/uploadStock/uploadStockThunk";
 import TabContext from "@mui/lab/TabContext/TabContext";
 import TabList from "@mui/lab/TabList";
+import Toast from "../components/Toast";
 
 const buttonSx = {
   ...{
@@ -89,11 +90,12 @@ const UploadStock = () => {
     );
   };
   useEffect(() => {
-    const materialsInStorage = JSON.parse(sessionStorage.getItem('materials'));
-    if (materialsInStorage?.length > 0) dispatch(setMaterial(materialsInStorage))
-    else dispatch(getMaterials())
-  }, [dispatch])
-  
+    const materialsInStorage = JSON.parse(sessionStorage.getItem("materials"));
+    if (materialsInStorage?.length > 0)
+      dispatch(setMaterial(materialsInStorage));
+    else dispatch(getMaterials());
+  }, [dispatch]);
+
   useEffect(() => {
     document.addEventListener("keydown", handleKey);
     if (category) dispatch(setItemSerializableStock([]));
@@ -109,19 +111,18 @@ const UploadStock = () => {
       const validId = !!item.id?.id;
       let validValue = false;
       if (hasSerial) {
-        validValue = !!item.serial
+        validValue = !!item.serial;
       } else {
-        validValue = !!item.cantidad
+        validValue = !!item.cantidad;
       }
       if (!validId || !validValue) {
-        isValidUpload = false
+        isValidUpload = false;
         continue;
       }
       if (validId && validValue) isValidUpload = true;
-    };
+    }
     setEnableUpload(isValidUpload);
-  }, [category, serializableStock])
-  
+  }, [category, serializableStock]);
 
   return (
     <section className="_uploadStock-container">
@@ -179,11 +180,10 @@ const UploadStock = () => {
       >
         Cargar
       </Button>
-      {checkLoading && (
-        <Fab color="primary" sx={buttonSx}>
-          <CheckIcon />
-        </Fab>
-      )}
+      <Toast
+        containerStyles={{ position: "relative", top: "-140px" }}
+        alertStyles={{ justifyContent: "center", width: "60%", margin: "auto" }}
+      />
     </section>
   );
 };
@@ -247,10 +247,17 @@ const RowForm = ({ data, postion, category }) => {
       <Autocomplete
         id="combo-box-demo"
         value={data.id ?? null}
-        options={materials[category === "1" ? "serializable" : "noSerializable"]}
+        options={
+          materials[category === "1" ? "serializable" : "noSerializable"]
+        }
         sx={{ width: "40%" }}
         onChange={(e, nV) => handleChangeAutoComplete(e, nV, postion)}
-        renderInput={(params) => <TextField {...params} label={category === "1" ? "Equipo" : "Material"} />}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            label={category === "1" ? "Equipo" : "Material"}
+          />
+        )}
       />
       <IconButton
         color="primary"

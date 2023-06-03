@@ -20,11 +20,14 @@ export const assignStockSlice = createSlice({
     },
     setUserAssign: (state, action) => {
         state.userAssign = {...action.payload}
+    },
+    deleteItemSelected: (state, action) => {
+      state.stockItemsSelected = state.stockItemsSelected.filter((item) => item.id !== action.payload.id)
     }
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { updateItemsSelected, updateInfoItemsSelected, setUsers, setUserAssign } = assignStockSlice.actions
+export const { updateItemsSelected, updateInfoItemsSelected, setUsers, setUserAssign, deleteItemSelected } = assignStockSlice.actions
 
 export default assignStockSlice.reducer
