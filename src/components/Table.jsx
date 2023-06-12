@@ -7,6 +7,7 @@ import { mapItemsToAssign } from '../utils/map';
 
 const Table = ({cols, rows, numberPage, currentPage, loading}) => {
     const dispatch = useDispatch();
+    const { statusTab } = useSelector(state => state.tableStock )
     const { stockItemsSelected } = useSelector(state => state.assignStock )
     const handleChange = (e, value) => {
         dispatch(setCurrentPage(value))
@@ -22,7 +23,10 @@ const Table = ({cols, rows, numberPage, currentPage, loading}) => {
             <DataGrid
                 loading={loading}
                 rows={rows}
-                checkboxSelection
+                sx={{
+                    fontFamily: 'system-ui'
+                }}
+                checkboxSelection={statusTab === '1'}
                 keepNonExistentRowsSelected={true}
                 disableRowSelectionOnClick
                 isRowSelectable={(e) => e.row?.estado === 'STOCK'}

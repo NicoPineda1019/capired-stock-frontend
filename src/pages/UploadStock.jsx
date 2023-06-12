@@ -91,7 +91,7 @@ const UploadStock = () => {
   };
   useEffect(() => {
     const materialsInStorage = JSON.parse(sessionStorage.getItem("materials"));
-    if (materialsInStorage?.length > 0)
+    if (Object.keys(materialsInStorage).length > 0)
       dispatch(setMaterial(materialsInStorage));
     else dispatch(getMaterials());
   }, [dispatch]);
@@ -153,16 +153,7 @@ const UploadStock = () => {
             </Fab>
           </Box>
         )}
-        {true
-          ? serializableStock.map((element, idx) => (
-              <RowForm
-                data={element}
-                postion={idx}
-                key={idx}
-                category={category}
-              />
-            ))
-          : noSerializableStock.map((element, idx) => (
+        {serializableStock.map((element, idx) => (
               <RowForm
                 data={element}
                 postion={idx}
@@ -251,6 +242,7 @@ const RowForm = ({ data, postion, category }) => {
           materials[category === "1" ? "serializable" : "noSerializable"]
         }
         sx={{ width: "40%" }}
+
         onChange={(e, nV) => handleChangeAutoComplete(e, nV, postion)}
         renderInput={(params) => (
           <TextField

@@ -38,10 +38,13 @@ const AssignStock = () => {
 
   useEffect(() => {
     let isValidItems = false;
-    stockItemsSelected.forEach(item => {
-      isValidItems = ((item.serial === item.confirmationSerial ) || false)
-      if (!isValidItems) return;
-    });
+
+    for (const item of stockItemsSelected) {
+      isValidItems = ((item.serial === item.confirmationSerial ) || item.cantidad > 0)
+      console.log(isValidItems)
+      if (!isValidItems) break;
+    }
+
     const isValidAssign = isValidItems && !!userAssign.id
     setEnableAssign(isValidAssign);
   }, [stockItemsSelected, userAssign, setEnableAssign])
@@ -88,6 +91,15 @@ const RowForm = ({ data }) => {
       })
     );
   };
+  const handleInputChangeCantidad = (e, currentData) => {
+    let value = e.target.value > currentData.cantidad || e.target.value <= 0 ? currentData.cantidad : e.target.value;
+    dispatch(
+      updateInfoItemsSelected({
+        ...currentData,
+        nuevaCantidad: value,
+      })
+    );
+  };
   const deleteItem = (id) => {
     dispatch(deleteItemSelected({id}))
   }
@@ -96,23 +108,47 @@ const RowForm = ({ data }) => {
       <TextField
         sx={{ width: "38%" }}
         id="outlined-read-only-input-equipo"
-        label="Equipo"
+        label={!!data.serial ? 'Equipo' : 'Material'}
         defaultValue={data.nombre}
         variant="filled"
         InputProps={{
           readOnly: true,
         }}
       />
+      {
+        !!data.serial &&
       <TextField
         sx={{ width: "27%" }}
         id="outlined-read-only-input-serial"
-        label="Serial"
-        defaultValue={data.serial}
+        label={"Serial"}
+        type={"text"}
+        value={data.serial}
         variant="filled"
         InputProps={{
           readOnly: true,
         }}
       />
+      }
+      {
+        !!data.cantidad &&
+        <TextField
+          sx={{ width: "27%" }}
+          id="outlined-read-only-input-cantd"
+          label={"Cantidad"}
+          type={"number"}
+          value={data.nuevaCantidad ?? data.cantidad}
+          onChange={(e) => handleInputChangeCantidad(e,data)}
+          InputProps={{
+            inputProps: {
+              max: data.cantidad,
+              min: 1,
+            }
+          }}
+        />
+
+      }
+      {
+        !!data.serial &&
       <div style={{ position: "relative", width: "27%" }}>
         <TextField
           error={data.serial !== data.confirmationSerial}
@@ -124,6 +160,7 @@ const RowForm = ({ data }) => {
           onChange={(e) => handleInputChange(e, data)}
         />
       </div>
+      }
       <IconButton 
         onClick={() => deleteItem(data.id)}
         color="primary"

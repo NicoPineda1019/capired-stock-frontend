@@ -5,3 +5,12 @@
 @import './pages/uploadStock';
 @import './pages/assignStock';
 @import './containers';
+
+.MuiDataGrid-columnHeaders {
+    background-color: #5799dc;
+    color: white;
+    font-size: large;
+}
+.MuiDataGrid-withBorderColor {
+    border-bottom: 1px solid black !important;
+}
