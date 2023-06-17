@@ -8,13 +8,13 @@ import {
   FormControl,
   FormGroup,
   IconButton,
+  Input,
   InputLabel,
   OutlinedInput,
   Tab,
 } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
 import UploadIcon from "@mui/icons-material/Upload";
-import CheckIcon from "@mui/icons-material/Check";
 import { green } from "@mui/material/colors";
 import AddIcon from "@mui/icons-material/Add";
 import { useEffect } from "react";
@@ -32,20 +32,14 @@ import {
 } from "../store/uploadStock/uploadStock";
 import {
   getMaterials,
+  uploadArrivalConfimration,
   uploadStock,
 } from "../store/uploadStock/uploadStockThunk";
 import TabContext from "@mui/lab/TabContext/TabContext";
 import TabList from "@mui/lab/TabList";
 import Toast from "../components/Toast";
+import ModalUpload from "../components/ModalUpload";
 
-const buttonSx = {
-  ...{
-    bgcolor: green[500],
-    "&:hover": {
-      bgcolor: green[700],
-    },
-  },
-};
 const UploadStock = () => {
   const dispatch = useDispatch();
 
@@ -65,7 +59,6 @@ const UploadStock = () => {
   const handleKey = useCallback(
     (e) => {
       if (!(e.target.tagName === "BODY" && category === "1")) return;
-      // console.log(e);
       if (e.code === "Enter") {
         dispatch(addItemSerializableStock());
         dispatch(resetScannerValue());
@@ -89,8 +82,20 @@ const UploadStock = () => {
       ])
     );
   };
+
+  const handleFile = (e) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(e.target.files[0]);
+    reader.onload = function () {
+      dispatch(uploadArrivalConfimration(reader.result.split(',')[1]))
+    };
+    reader.onerror = function (error) {
+      console.error(error);
+    };
+    e.target.value = null
+  }
   useEffect(() => {
-    const materialsInStorage = JSON.parse(sessionStorage.getItem("materials"));
+    const materialsInStorage = JSON.parse(sessionStorage.getItem("materials")) ?? {};
     if (Object.keys(materialsInStorage).length > 0)
       dispatch(setMaterial(materialsInStorage));
     else dispatch(getMaterials());
@@ -126,7 +131,9 @@ const UploadStock = () => {
 
   return (
     <section className="_uploadStock-container">
+      <ModalUpload />
       <h2>Cargar Inventario</h2>
+      <input type='file' onChange={handleFile}/>
       <TabContext value={category}>
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
           <TabList aria-label="basic tabs example" onChange={handleTab}>

@@ -26,6 +26,7 @@ const Table = ({cols, rows, numberPage, currentPage, loading}) => {
                 sx={{
                     fontFamily: 'system-ui'
                 }}
+                getRowClassName={params => params.row.confirmacion_cargue === 'NO' ? '_table-row-alert-confirmation': ''}
                 checkboxSelection={statusTab === '1'}
                 keepNonExistentRowsSelected={true}
                 disableRowSelectionOnClick

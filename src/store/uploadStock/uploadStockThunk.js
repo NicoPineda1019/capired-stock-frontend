@@ -2,6 +2,7 @@ import { STATES } from "../../constants";
 import { getStock, postStock, updateStock } from "../../services/stock"
 import { mapMaterials, mapPostStock, mapUpdateStockNoSerializable } from "../../utils/map"
 import { closeLoading, openLoading } from "../loading/loadingSlice"
+import { openModal, setModalInfo } from "../modal/modalSlice";
 import { setParameters } from "../toast/toastSlice";
 import { setItemSerializableStock, setMaterial } from "./uploadStock"
 const msgSuccess = 'Inventario cargado con éxito';
@@ -51,5 +52,26 @@ export const getMaterials = () => {
             })
             .catch((err) => console.error(err))
             .finally(() => dispatch(closeLoading()))
+    }
+}
+
+export const uploadArrivalConfimration = (base64) => {
+    return async(dispatch) => {
+        dispatch(openLoading())
+        updateStock('/stock/arrival-confirmation', {
+            file: base64
+        })
+        .then((resp) => {
+            dispatch(setModalInfo({
+                totalSend: resp.data.totalSend,
+                totalFound: resp.data.totalFound,
+                serialesRemaining: resp.data.serialesRemaining.join(),
+            }))
+            dispatch(openModal())
+        })
+        .catch(err => console.error(err))
+        .finally(() => {
+            dispatch(closeLoading())
+        })
     }
 }

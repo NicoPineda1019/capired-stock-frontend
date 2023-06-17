@@ -1,9 +1,23 @@
 import { Chip, Stack } from "@mui/material";
 import { updateItemsSelected } from "../store/assignStock/assignStockSlice";
 const moment = require('moment-timezone');
+const timeZone = 'America/Bogota'
 
+export const getRangeMonth = () => {
+  const dateNow = moment().tz(timeZone)
+  const firstDay = moment().tz(timeZone).set('D',1);
+  return [
+    firstDay.format("YYYY-MM-DD"),
+    dateNow.format("YYYY-MM-DD")
+  ]
+}
+export const formatValues = (a, b) => {
+  const numberA = isNaN(a) ? 0 :  Number(a);
+  const numberB = isNaN(b) ? 0 :  Number(b);
+  return numberA + numberB
+}
 export const mapPostStock = (items) => {
-  const dateNow = moment().tz("America/Bogota")
+  const dateNow = moment().tz(timeZone)
   const uploadDateTime = dateNow.format("YYYY-MM-DD HH:mm:ss")
   const updateDate = dateNow.format("YYYY-MM-DD")
   const updateTime = dateNow.format("HH:mm:ss")
@@ -19,7 +33,7 @@ export const mapPostStock = (items) => {
 };
 
 export const mapUpdateStock = (items, status, userId) => {
-  const dateNow = moment().tz("America/Bogota")
+  const dateNow = moment().tz(timeZone)
   const updateDate = dateNow.format("YYYY-MM-DD")
   const updateTime = dateNow.format("HH:mm:ss")
   const ids = items.map((item) => item.id).join(",");
@@ -32,7 +46,7 @@ export const mapUpdateStock = (items, status, userId) => {
   }
 }
 export const mapUpdateStockNoSerializable = (items, status, userId, operator = '+') => {
-  const dateNow = moment().tz("America/Bogota")
+  const dateNow = moment().tz(timeZone)
   const updateDate = dateNow.format("YYYY-MM-DD")
   const updateTime = dateNow.format("HH:mm:ss")
   const elements = items.map((item) => ({
@@ -73,8 +87,7 @@ export const mapUsers = (users) => {
 
 export const mapItemsToAssign = (idsSelected) => {
   return async (dispatch,getState) => {
-    const { serializableInfo, noSerializableInfo, categoryTab } = getState().tableStock
-    const { stockItemsSelected } = getState().assignStock
+    const { serializableInfo, noSerializableInfo } = getState().tableStock
     const elements = [...serializableInfo, ...noSerializableInfo];
       const newArray = idsSelected.map((id) => {
         const keepId = elements.find((item) => item.id === id)

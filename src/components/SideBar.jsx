@@ -9,6 +9,12 @@ const paths = [
   {
     active: true,
     icon: mdiStore,
+    name: "Resumen Inventario",
+    path: "/summary",
+  },
+  {
+    active: false,
+    icon: mdiStore,
     name: "Inventario",
     path: "/stock",
   },
