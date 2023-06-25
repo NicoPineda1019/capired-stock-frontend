@@ -48,3 +48,14 @@ export const getCurrentUser = (userName, callback) => {
         else callback({sesion, cognitoUser: user}, null)
     })
 }
+
+export const validateRol = (groups) => {
+    const admin = 'admin';
+    const tech = 'tecnico';
+    if (groups.includes(admin)){
+        return '/admin/summary'
+    }
+    if (groups.includes(tech)){
+        return '/tech/stock'
+    }
+}
