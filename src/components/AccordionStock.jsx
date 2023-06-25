@@ -6,115 +6,26 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
+import { useDispatch } from "react-redux";
+import { updateStockItemsIncoming } from "../store/inboxStock/inboxStockSlice";
 
-const mock = [
-  {
-    id: 90,
-    codigo: "4022728",
-    nombre: "EMTA WF B/G/N TC7300 D3 LIN2 LAN4 TECN",
-    serial: "SERIAL234523463465",
-    fecha_cargue: "2023-06-17T15:30:57.000Z",
-    fecha_actualizacion: "2023-06-17T00:00:00.000Z",
-    hora_actualizacion: "15:30:57",
-    estado: "STOCK",
-    usuario: null,
-    confirmacion_cargue: "SI",
-  },
-  {
-    id: 91,
-    codigo: "4019461",
-    nombre: "AMPLIFICADOR INTERNO (REF HCDA-1 FRA)",
-    serial: "SERIAL123562364",
-    fecha_cargue: "2023-06-17T15:30:57.000Z",
-    fecha_actualizacion: "2023-06-17T00:00:00.000Z",
-    hora_actualizacion: "15:30:57",
-    estado: "STOCK",
-    usuario: null,
-    confirmacion_cargue: "SI",
-  },
-  {
-    id: 90,
-    codigo: "4022728",
-    nombre: "EMTA WF B/G/N TC7300 D3 LIN2 LAN4 TECN",
-    serial: "SERIAL234523463465",
-    fecha_cargue: "2023-06-17T15:30:57.000Z",
-    fecha_actualizacion: "2023-06-17T00:00:00.000Z",
-    hora_actualizacion: "15:30:57",
-    estado: "STOCK",
-    usuario: null,
-    confirmacion_cargue: "SI",
-  },
-  {
-    id: 91,
-    codigo: "4019461",
-    nombre: "AMPLIFICADOR INTERNO (REF HCDA-1 FRA)",
-    serial: "SERIAL123562364",
-    fecha_cargue: "2023-06-17T15:30:57.000Z",
-    fecha_actualizacion: "2023-06-17T00:00:00.000Z",
-    hora_actualizacion: "15:30:57",
-    estado: "STOCK",
-    usuario: null,
-    confirmacion_cargue: "SI",
-  },
-  {
-    id: 90,
-    codigo: "4022728",
-    nombre: "EMTA WF B/G/N TC7300 D3 LIN2 LAN4 TECN",
-    serial: "SERIAL234523463465",
-    fecha_cargue: "2023-06-17T15:30:57.000Z",
-    fecha_actualizacion: "2023-06-17T00:00:00.000Z",
-    hora_actualizacion: "15:30:57",
-    estado: "STOCK",
-    usuario: null,
-    confirmacion_cargue: "SI",
-  },
-  {
-    id: 91,
-    codigo: "4019461",
-    nombre: "AMPLIFICADOR INTERNO (REF HCDA-1 FRA)",
-    serial: "SERIAL123562364",
-    fecha_cargue: "2023-06-17T15:30:57.000Z",
-    fecha_actualizacion: "2023-06-17T00:00:00.000Z",
-    hora_actualizacion: "15:30:57",
-    estado: "STOCK",
-    usuario: null,
-    confirmacion_cargue: "SI",
-  },
-  {
-    id: 90,
-    codigo: "4022728",
-    nombre: "EMTA WF B/G/N TC7300 D3 LIN2 LAN4 TECN",
-    serial: "SERIAL234523463465",
-    fecha_cargue: "2023-06-17T15:30:57.000Z",
-    fecha_actualizacion: "2023-06-17T00:00:00.000Z",
-    hora_actualizacion: "15:30:57",
-    estado: "STOCK",
-    usuario: null,
-    confirmacion_cargue: "SI",
-  },
-  {
-    id: 91,
-    codigo: "4019461",
-    nombre: "AMPLIFICADOR INTERNO (REF HCDA-1 FRA)",
-    serial: "SERIAL123562364",
-    fecha_cargue: "2023-06-17T15:30:57.000Z",
-    fecha_actualizacion: "2023-06-17T00:00:00.000Z",
-    hora_actualizacion: "15:30:57",
-    estado: "STOCK",
-    usuario: null,
-    confirmacion_cargue: "SI",
-  },
-];
-const AccordionStock = () => {
+const AccordionStock = ({items}) => {
   const [expanded, setExpanded] = useState(false);
+  const dispatch = useDispatch();
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
+  const handleRadioButtonChange = (e, currentItem) => {
+    dispatch(updateStockItemsIncoming({
+      ...currentItem,
+      _state: e
+    }))
+  }
   return (
     <section className="_accordionStock-container">
       
-      {mock.map((item, idx) => (
+      {items.map((item, idx) => (
         <Accordion
           key={idx}
           expanded={expanded === idx}
@@ -151,21 +62,31 @@ const AccordionStock = () => {
                   item.hora_actualizacion}
               </span>
             </p>
+            <p>
+              <label className="_accordionStock-header">
+                Cantidad
+              </label>
+              <span>{item.cantidad}</span>
+              
+            </p>
             <FormControl
               sx={{
                 fontSize: "1em",
               }}
             >
-              <RadioGroup row name="row-radio-buttons-group">
+              <RadioGroup row name="row-radio-buttons-group"
+                value={item._state ?? ""}
+                onChange={(e) => handleRadioButtonChange(e.target.value, item)}
+              >
                 <FormControlLabel
-                  value="1"
+                  value="accept"
                   disableTypography
                   control={<Radio size="small" />}
                   label="Aceptar"
                 />
                 <FormControlLabel
                   disableTypography
-                  value="2"
+                  value="return"
                   control={<Radio size="small" />}
                   label="Devolver"
                 />

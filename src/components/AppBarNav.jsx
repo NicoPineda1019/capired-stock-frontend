@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, useContext, useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
@@ -13,8 +13,29 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
+import { Auth } from "../context/auth";
+import { useNavigate } from "react-router-dom";
 
 const AppBarNav = () => {
+  const auth = useContext(Auth);
+  const navigate = useNavigate()
+  const closeSession = () => {
+    /*
+    auth?.cognitoUser?.signOut()
+    setTimeout(() => {
+      navigate('/')
+    }, 10000);
+    */
+    
+    auth?.cognitoUser?.globalSignOut({
+      onSuccess: () => {
+        console.log('Session Closed SuccessFully')
+        window.location.reload()
+      },
+      onFailure: (e) => console.error(e)
+    })
+    
+  }
   const [state, setState] = useState({
     top: false,
     left: false,
@@ -49,6 +70,9 @@ const AppBarNav = () => {
         ))}
       </List>
       <Divider />
+      <ListItemButton onClick={closeSession}>
+        <ListItemText sx={{ color: 'whitesmoke'}} primary={"Cerrar Sesión"}></ListItemText>
+      </ListItemButton>
     </section>
   );
   return (

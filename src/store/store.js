@@ -7,6 +7,7 @@ import summaryStockSlice from './summaryStock/summaryStockSlice'
 import tableStockSlice from './tableStock/tableStockSlice'
 import toastSlice from './toast/toastSlice'
 import uploadStockSlice from './uploadStock/uploadStock'
+import inboxStockSlice from './inboxStock/inboxStockSlice'
 
 export default configureStore({
   reducer: {
@@ -17,6 +18,7 @@ export default configureStore({
     assignStock: assignStockSlice,
     toast: toastSlice,
     summaryStock: summaryStockSlice,
-    modal: modalSlice
+    modal: modalSlice,
+    inboxStock: inboxStockSlice
   },
 })

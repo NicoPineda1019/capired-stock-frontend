@@ -17,6 +17,12 @@ export const authenticateUser = (userName, pass, setAuthContext) => {
         user.authenticateUser(authDetails, {
             onSuccess: (data) => {
                 console.log('Response Auth ', data)
+                // data.getRefreshToken()
+                user.getSession(function (error, sesion) {
+                    if (error) return console.error(error)
+                    else console.log(sesion)
+                })
+                
                 setAuthContext({sesion: data, cognitoUser: user})
                 dispatch(closeLoading())
             },
@@ -42,11 +48,16 @@ export const getCurrentUser = (userName, callback) => {
         Pool: CognitoUserPool,
     })
     const cognitoUser = CognitoUserPool.getCurrentUser()
+    console.log('current', cognitoUser)
     if (!cognitoUser) return callback(null, 'Not authenticated')
     cognitoUser.getSession(function (error, sesion) {
-        if (error) return callback(null, error)
-        else callback({sesion, cognitoUser: user}, null)
+        user.refreshSession(sesion.getRefreshToken(), function (err, resp){
+            console.log('refresh ', resp)
+            if (error) return callback(null, error)
+            else callback({sesion: resp, cognitoUser: user}, null)
+        })
     })
+
 }
 
 export const validateRol = (groups) => {
