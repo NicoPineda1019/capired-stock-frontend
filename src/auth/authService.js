@@ -16,8 +16,6 @@ export const authenticateUser = (userName, pass, setAuthContext) => {
         dispatch(openLoading())
         user.authenticateUser(authDetails, {
             onSuccess: (data) => {
-                console.log('Response Auth ', data)
-                // data.getRefreshToken()
                 user.getSession(function (error, sesion) {
                     if (error) return console.error(error)
                     else console.log(sesion)
@@ -48,11 +46,9 @@ export const getCurrentUser = (userName, callback) => {
         Pool: CognitoUserPool,
     })
     const cognitoUser = CognitoUserPool.getCurrentUser()
-    console.log('current', cognitoUser)
     if (!cognitoUser) return callback(null, 'Not authenticated')
     cognitoUser.getSession(function (error, sesion) {
         user.refreshSession(sesion.getRefreshToken(), function (err, resp){
-            console.log('refresh ', resp)
             if (error) return callback(null, error)
             else callback({sesion: resp, cognitoUser: user}, null)
         })

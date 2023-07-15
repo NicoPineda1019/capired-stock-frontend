@@ -29,10 +29,8 @@ const Login = ({ setAuth }) => {
   };
 
   useEffect(() => {
-    console.log("Auth", auth);
     if (auth?.sesion?.isValid()) {
       const groups = auth.sesion?.accessToken?.payload["cognito:groups"];
-      console.log("groups", groups);
       const path = validateRol(groups);
       navigate(path);
     }

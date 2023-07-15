@@ -17,7 +17,7 @@ import UserContent from "../layouts/UserContent";
 const AppRouter = () => {
   const [authContext, setAuthContext] = useState(null);
   useEffect(() => {
-    getCurrentUser("nikolaswhite255@gmail.com", (session, error) => {
+    getCurrentUser("", (session, error) => {
       if (error) return setAuthContext({ error });
       setAuthContext(session);
     });

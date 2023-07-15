@@ -92,3 +92,76 @@ export const updateStockSerializable = () => {
     });
   };
 };
+export const updateStockPending = () => {
+  return async (dispatch, getState) => {
+    const { stockItemsIncoming } = getState().inboxStock;
+    const itemSerializableAccept = [];
+    const itemsSerializableReturn = [];
+    const itemNoSerializableAccept = [];
+    const itemsNoSerializableReturn = [];
+    stockItemsIncoming.forEach((item) => {
+      if (!!item.serial) {
+        if (item._state === 'accept') itemSerializableAccept.push(item);
+        if (item._state === 'return') itemsSerializableReturn.push(item)
+      } else {
+        if (item._state === 'accept') itemNoSerializableAccept.push(item);
+        if (item._state === 'return') itemsNoSerializableReturn.push(item)
+      };
+    });
+
+    const promises = [];
+    if (itemSerializableAccept.length > 0) {
+      const bodySerializableAssigned = mapUpdateStock(
+        itemSerializableAccept,
+        STATES.ASIGNADO,
+        "SAME_USER"
+      );  
+      promises.push(updateStock("/stock/stock-serializable", bodySerializableAssigned));
+    }
+    if (itemsSerializableReturn.length > 0) {
+      const bodySerializableReturned = mapUpdateStock(
+        itemsSerializableReturn,
+        STATES.STOCK
+      );
+      promises.push(updateStock("/stock/stock-serializable", bodySerializableReturned));
+    }
+    if (itemNoSerializableAccept.length > 0) {
+      const bodyNoSerializableStockPendiente = mapUpdateStockNoSerializable(
+        itemNoSerializableAccept,
+        STATES.PENDIENTE,
+        "SAME_USER",
+        "-"
+      );
+      const bodyNoSerializableStockAssigned = mapUpdateStockNoSerializable(
+        itemNoSerializableAccept,
+        STATES.ASIGNADO,
+        "SAME_USER"
+      );
+      updateStock("/stock/stock-no-serializable", bodyNoSerializableStockPendiente)
+      updateStock("/stock/stock-no-serializable", bodyNoSerializableStockAssigned)
+    }
+    const promisesResponse = Promise.all(promises);
+    promisesResponse.then(() => {
+      dispatch(
+        setParameters({
+          show: true,
+          msg: msgSuccess,
+          type: success,
+        })
+      );
+    });
+    promisesResponse.catch((err) => {
+      console.error(err);
+      dispatch(
+        setParameters({
+          show: true,
+          msg: msgError,
+          type: error,
+        })
+      );
+    });
+    promisesResponse.finally(() => {
+      dispatch(closeLoading());
+    });
+  };
+};

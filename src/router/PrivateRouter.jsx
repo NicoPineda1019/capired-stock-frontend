@@ -4,7 +4,6 @@ import { Navigate, Outlet } from 'react-router-dom'
 
 const PrivateRouter = ({children}) => {
     const auth = useContext(Auth)
-    console.log('Result ', auth?.sesion?.isValid())
     return (
         <>
             {auth === null ?

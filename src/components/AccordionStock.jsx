@@ -48,10 +48,13 @@ const AccordionStock = ({items}) => {
               fontSize: "0.8em",
             }}
           >
-            <p>
-              <label className="_accordionStock-header">Serial</label>
-              <span>{item.serial}</span>
-            </p>
+            {
+            !!item.serial &&
+              <p>
+                <label className="_accordionStock-header">Serial</label>
+                <span>{item.serial}</span>
+              </p>
+            }
             <p>
               <label className="_accordionStock-header">
                 Fecha de Asignación
@@ -62,13 +65,15 @@ const AccordionStock = ({items}) => {
                   item.hora_actualizacion}
               </span>
             </p>
-            <p>
-              <label className="_accordionStock-header">
-                Cantidad
-              </label>
-              <span>{item.cantidad}</span>
-              
-            </p>
+            {
+            !!item.cantidad &&
+              <p>
+                <label className="_accordionStock-header">
+                  Cantidad
+                </label>
+                <span>{item.cantidad}</span>
+              </p>
+            }
             <FormControl
               sx={{
                 fontSize: "1em",

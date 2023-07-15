@@ -41,7 +41,7 @@ export const mapUpdateStock = (items, status, userId) => {
     fechaActualizacion: updateDate,
     horaActualizacion: updateTime,
     idEstado: status,
-    idUsuario: userId,
+    idUsuario: userId === "SAME_USER" ? items[0].id_usuario : userId,
     id: ids
   }
 }
@@ -57,7 +57,7 @@ export const mapUpdateStockNoSerializable = (items, status, userId, operator = '
     fechaActualizacion: updateDate,
     horaActualizacion: updateTime,
     idEstado: status,
-    idUsuario: userId,
+    idUsuario: userId === "SAME_USER" ? items[0].id_usuario : userId,
     elements
   }
   

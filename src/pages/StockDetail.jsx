@@ -18,7 +18,6 @@ import { getStockByStatus } from "../store/tableStock/stockThunk";
 import { useNavigate } from "react-router-dom";
 
 const StockDetail = () => {
-  const auth = useContext(Auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const {
@@ -31,8 +30,6 @@ const StockDetail = () => {
     loading,
   } = useSelector((state) => state.tableStock);
   const { stockItemsSelected } = useSelector((state) => state.assignStock);
-
-  // console.log('auth', auth)
 
   const handleCategoryTab = (e, newValue) => {
     dispatch(setCategoryTab(newValue));
@@ -89,7 +86,7 @@ const StockDetail = () => {
         <Fab 
           variant="extended" 
           onClick={() => {
-            navigate('/assign')
+            navigate('/admin/assign')
           }}>
           {`Continuar Asignación (${stockItemsSelected.length})`}
           <ArrowForwardIosIcon sx={{ mr: 1 }} />

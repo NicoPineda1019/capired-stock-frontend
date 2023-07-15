@@ -10,25 +10,25 @@ const paths = [
     active: true,
     icon: mdiStore,
     name: "Resumen Inventario",
-    path: "/summary",
+    path: "/admin/summary",
   },
   {
     active: false,
     icon: mdiStore,
     name: "Inventario",
-    path: "/stock",
+    path: "/admin/stock",
   },
   {
     active: false,
     icon: mdiHandCoin,
     name: "Asignar Inventario",
-    path: "/assign",
+    path: "/admin/assign",
   },
   {
     active: false,
     icon: mdiUploadMultiple,
     name: "Cargar Inventario",
-    path: "/upload",
+    path: "/admin/upload",
   },
 ];
 const SideBar = () => {
