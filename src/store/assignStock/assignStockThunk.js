@@ -5,11 +5,14 @@ import {
   mapUpdateStockNoSerializable,
   mapUsers,
 } from "../../utils/map";
+import { setStockItemsIncoming } from "../inboxStock/inboxStockSlice";
 import { closeLoading, openLoading } from "../loading/loadingSlice";
 import { setParameters } from "../toast/toastSlice";
 import { setUsers, updateItemsSelected } from "./assignStockSlice";
 const msgSuccess = "Inventario asignado con éxito";
 const msgError = "Error asignando inventario";
+const msgSuccessReviewed = "Inventario recibido con éxito";
+const msgErrorReviewed = "Error recibido inventario";
 const success = "success";
 const error = "error";
 
@@ -137,25 +140,43 @@ export const updateStockPending = () => {
         STATES.ASIGNADO,
         "SAME_USER"
       );
-      updateStock("/stock/stock-no-serializable", bodyNoSerializableStockPendiente)
-      updateStock("/stock/stock-no-serializable", bodyNoSerializableStockAssigned)
+      promises.push(updateStock("/stock/stock-no-serializable", bodyNoSerializableStockPendiente))
+      promises.push(updateStock("/stock/stock-no-serializable", bodyNoSerializableStockAssigned))
     }
+    if (itemsNoSerializableReturn.length > 0) {
+      const bodyNoSerializableStockPendiente = mapUpdateStockNoSerializable(
+        itemsNoSerializableReturn,
+        STATES.PENDIENTE,
+        "SAME_USER",
+        "-"
+      );
+      const bodyNoSerializableStockAssigned = mapUpdateStockNoSerializable(
+        itemsNoSerializableReturn,
+        STATES.STOCK,
+        0
+      );
+      promises.push(updateStock("/stock/stock-no-serializable", bodyNoSerializableStockPendiente))
+      promises.push(updateStock("/stock/stock-no-serializable", bodyNoSerializableStockAssigned))
+
+    }
+    if (promises.length === 0) return
     const promisesResponse = Promise.all(promises);
     promisesResponse.then(() => {
       dispatch(
         setParameters({
           show: true,
-          msg: msgSuccess,
+          msg: msgSuccessReviewed,
           type: success,
         })
       );
+      dispatch(setStockItemsIncoming([]))
     });
     promisesResponse.catch((err) => {
       console.error(err);
       dispatch(
         setParameters({
           show: true,
-          msg: msgError,
+          msg: msgErrorReviewed,
           type: error,
         })
       );

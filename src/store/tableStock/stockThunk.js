@@ -1,15 +1,17 @@
 import { getStock } from "../../services/stock"
-import { setLoading, setNoSerializableInfo, setNumberPage, setSerializableInfo } from "./tableStockSlice"
+import { closeLoading, openLoading } from "../loading/loadingSlice"
+import { setNoSerializableInfo, setNumberPage, setSerializableInfo } from "./tableStockSlice"
 
-export const getStockByStatus = (page, _status) => {
+export const getStockByStatus = (page, _status, user) => {
     return async (dispatch, getState) => {
         const { categoryTab } = getState().tableStock
         const isSerializable = categoryTab === "1";
         const path = isSerializable ? '/stock/stock-serializable' : categoryTab === "2" ? "/stock/stock-no-serializable" : "";
-        dispatch(setLoading(true))
+        dispatch(openLoading())
         await getStock(path, {
             idEstado: _status === '1' ? '1,4' : _status,
-            page: page
+            page: page,
+            user
         }).then((response) => {
             dispatch(setNumberPage(response.data.numberPages))
             if (isSerializable) dispatch(setSerializableInfo(response.data.items))
@@ -19,6 +21,6 @@ export const getStockByStatus = (page, _status) => {
             if (isSerializable) dispatch(setSerializableInfo([]))
             else dispatch(setNoSerializableInfo([]))
         })
-        .finally(() => dispatch(setLoading(false)))
+        .finally(() => dispatch(closeLoading()))
     }
 }

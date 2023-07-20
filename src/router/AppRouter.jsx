@@ -11,8 +11,9 @@ import MenuContent from "../layouts/MenuContent";
 import StockDetail from "../pages/StockDetail";
 import AssignStock from "../pages/AssignStock";
 import SummaryStock from "../pages/SummaryStock";
-import StockDetailUserResponsive from "../pages/StockDetailUserResponsive";
 import UserContent from "../layouts/UserContent";
+import StockInboxResponsive from "../pages/StockInboxResponsive";
+import StockDetailResponsive from "../pages/StockDetailResponsive";
 
 const AppRouter = () => {
   const [authContext, setAuthContext] = useState(null);
@@ -35,13 +36,13 @@ const AppRouter = () => {
                 <Routes>
                   <Route path="/admin" element={<MenuContent />}>
                     <Route path="stock" element={<StockDetail />} />
-                    <Route path="stock-tech" element={<StockDetailUserResponsive />} />
                     <Route path="assign" element={<AssignStock />} />
                     <Route path="upload" element={<UploadStock />} />
                     <Route path="summary" element={<SummaryStock />} />
                   </Route>
                   <Route path="/tech" element={<UserContent />}>
-                    <Route path="stock" element={<StockDetailUserResponsive />}></Route>
+                    <Route path="inbox" element={<StockInboxResponsive />}></Route>
+                    <Route path="stock" element={<StockDetailResponsive />}></Route>
                   </Route>
                 </Routes>
               </PrivateRouter>

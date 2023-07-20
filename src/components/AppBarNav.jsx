@@ -16,6 +16,16 @@ import InboxIcon from "@mui/icons-material/MoveToInbox";
 import { Auth } from "../context/auth";
 import { useNavigate } from "react-router-dom";
 
+const userRoutes = [
+  {
+    label: "Inventario",
+    path: "stock"
+  },
+  {
+    label: "Bandeja de Entrada",
+    path: "inbox"
+  },
+]
 const AppBarNav = () => {
   const auth = useContext(Auth);
   const navigate = useNavigate()
@@ -58,13 +68,13 @@ const AppBarNav = () => {
       onClick={toggleDrawer(anchor, false)}
     >
       <List>
-        {['Inventario', 'Bandeja de Entrada', 'Send email', 'Drafts'].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
+        {userRoutes.map((item, index) => (
+          <ListItem key={index} disablePadding>
+            <ListItemButton onClick={() => navigate(item.path)}>
               <ListItemIcon>
                 <InboxIcon />
               </ListItemIcon>
-              <ListItemText sx={{ color: 'whitesmoke'}} primary={text} />
+              <ListItemText sx={{ color: 'whitesmoke'}} primary={item.label} />
             </ListItemButton>
           </ListItem>
         ))}

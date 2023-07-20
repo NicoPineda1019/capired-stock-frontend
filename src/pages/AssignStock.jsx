@@ -41,7 +41,6 @@ const AssignStock = () => {
 
     for (const item of stockItemsSelected) {
       isValidItems = ((item.serial === item.confirmationSerial ) || item.cantidad > 0)
-      console.log(isValidItems)
       if (!isValidItems) break;
     }
 
