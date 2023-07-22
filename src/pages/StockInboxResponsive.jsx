@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import AccordionStock from "../components/AccordionStock";
-import { Box, Button, Pagination, Tab } from "@mui/material";
+import { Box, Button,Tab } from "@mui/material";
 import TabContext from "@mui/lab/TabContext/TabContext";
 import TabList from "@mui/lab/TabList/TabList";
 import { useDispatch, useSelector } from "react-redux";
@@ -47,7 +47,9 @@ const StockInboxResponsive = () => {
           </Box>
         </TabContext>
       </Box>
-      <AccordionStock items={stockItemsIncoming}/>
+      <AccordionStock items={stockItemsIncoming} configurations={{
+        requireRadioGroup:true
+      }}/>
       <Button variant="contained"onClick={() => dispatch(updateStockPending())}>Guardar y enviar</Button>
     </section>
   );

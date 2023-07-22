@@ -6,11 +6,9 @@
     background-color: rgb(13 110 253 / 25%);
 }
 ._stock-container-row {
-    display: grid;
-    grid-template-rows: 1fr 10fr;
+    min-height: 100vh;
     font-size: 18px;
     font-weight: 500;
-    height: 100vh;
     background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
 }
 

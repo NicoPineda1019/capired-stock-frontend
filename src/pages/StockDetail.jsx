@@ -1,5 +1,4 @@
-import React, { useContext } from "react";
-import { Auth } from "../context/auth";
+import React from "react";
 import { useEffect } from "react";
 import Table from "../components/Table";
 import Box from "@mui/material/Box";
@@ -44,7 +43,7 @@ const StockDetail = () => {
 
   return (
     <section className="_stock-content">
-      <div style={{ marginTop: "20px", width: "90%" }}>
+      <div style={{ marginTop: "20px", width: "100%", height: '740px' }}>
         <Box className="_table-header">
           <TabContext value={categoryTab}>
             <Box sx={{ borderBottom: 1 }}>

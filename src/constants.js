@@ -4,3 +4,6 @@ export const STATES = {
     CONSUMIDO: 3,
     PENDIENTE: 4
 }
+
+export const ADMIN_ROLE = "admin";
+export const TECH_ROLE = "tecnico"

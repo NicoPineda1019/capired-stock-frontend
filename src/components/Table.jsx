@@ -19,7 +19,7 @@ const Table = ({cols, rows, numberPage, currentPage, loading}) => {
      return <Pagination count={numberPage} page={currentPage} color="primary" onChange={handleChange} />
     }
     return (
-        <div style={{ height: '80vh', backgroundColor: 'rgba(230, 235, 240, .7)' }}>
+        <div style={{ height: '80%', backgroundColor: 'rgba(230, 235, 240, .7)' }}>
             <DataGrid
                 loading={loading}
                 rows={rows}

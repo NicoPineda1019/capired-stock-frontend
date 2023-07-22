@@ -9,7 +9,7 @@ import FormControl from "@mui/material/FormControl";
 import { useDispatch } from "react-redux";
 import { updateStockItemsIncoming } from "../store/inboxStock/inboxStockSlice";
 
-const AccordionStock = ({items}) => {
+const AccordionStock = ({items, configurations}) => {
   const [expanded, setExpanded] = useState(false);
   const dispatch = useDispatch();
 
@@ -74,7 +74,9 @@ const AccordionStock = ({items}) => {
                 <span>{item.cantidad}</span>
               </p>
             }
-            <FormControl
+            {
+              configurations?.requireRadioGroup &&
+              <FormControl
               sx={{
                 fontSize: "1em",
               }}
@@ -96,7 +98,8 @@ const AccordionStock = ({items}) => {
                   label="Devolver"
                 />
               </RadioGroup>
-            </FormControl>
+             </FormControl>
+            }
           </AccordionDetails>
         </Accordion>
       ))}

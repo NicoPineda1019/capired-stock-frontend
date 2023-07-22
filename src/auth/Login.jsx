@@ -6,10 +6,8 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setError, setPass, setUser } from "../store/login/loginSlice";
 import {
-  Box,
   Button,
   FormControl,
-  FormGroup,
   Input,
   InputAdornment,
   InputLabel,
@@ -32,6 +30,7 @@ const Login = ({ setAuth }) => {
     if (auth?.sesion?.isValid()) {
       const groups = auth.sesion?.accessToken?.payload["cognito:groups"];
       const path = validateRol(groups);
+      console.log('path', path)
       navigate(path);
     }
   }, [auth, navigate]);

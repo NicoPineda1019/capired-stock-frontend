@@ -2,6 +2,7 @@ import { AuthenticationDetails, CognitoUser } from "amazon-cognito-identity-js"
 import CognitoUserPool from "./CognitoUserPool"
 import { closeLoading, openLoading } from "../store/loading/loadingSlice"
 import { setError, setPass } from "../store/login/loginSlice"
+import { ADMIN_ROLE, TECH_ROLE } from "../constants"
 
 export const authenticateUser = (userName, pass, setAuthContext) => {
     return async(dispatch) => {
@@ -57,12 +58,12 @@ export const getCurrentUser = (userName, callback) => {
 }
 
 export const validateRol = (groups) => {
-    const admin = 'admin';
-    const tech = 'tecnico';
-    if (groups.includes(admin)){
+    if (groups.includes(ADMIN_ROLE)){
+        sessionStorage.setItem('ROLE',ADMIN_ROLE)
         return '/admin/summary'
     }
-    if (groups.includes(tech)){
+    if (groups.includes(TECH_ROLE)){
+        sessionStorage.setItem('ROLE',TECH_ROLE)
         return '/tech/stock'
     }
 }

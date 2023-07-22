@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { Routes, Route, BrowserRouter, Navigate } from "react-router-dom";
 import Login from "../auth/Login";
 import { Auth } from "../context/auth";
@@ -7,7 +7,6 @@ import { getCurrentUser } from "../auth/authService";
 import PrivateRouter from "./PrivateRouter";
 import Loading from "../components/Loading";
 import UploadStock from "../pages/UploadStock";
-import MenuContent from "../layouts/MenuContent";
 import StockDetail from "../pages/StockDetail";
 import AssignStock from "../pages/AssignStock";
 import SummaryStock from "../pages/SummaryStock";
@@ -34,7 +33,7 @@ const AppRouter = () => {
             element={
               <PrivateRouter>
                 <Routes>
-                  <Route path="/admin" element={<MenuContent />}>
+                  <Route path="/admin" element={<UserContent />}>
                     <Route path="stock" element={<StockDetail />} />
                     <Route path="assign" element={<AssignStock />} />
                     <Route path="upload" element={<UploadStock />} />
