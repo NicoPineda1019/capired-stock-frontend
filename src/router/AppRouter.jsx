@@ -13,6 +13,7 @@ import SummaryStock from "../pages/SummaryStock";
 import UserContent from "../layouts/UserContent";
 import StockInboxResponsive from "../pages/StockInboxResponsive";
 import StockDetailResponsive from "../pages/StockDetailResponsive";
+import OutputStockResponsive from "../pages/OutputStockResponsive/OutputStockResponsive";
 
 const AppRouter = () => {
   const [authContext, setAuthContext] = useState(null);
@@ -42,6 +43,7 @@ const AppRouter = () => {
                   <Route path="/tech" element={<UserContent />}>
                     <Route path="inbox" element={<StockInboxResponsive />}></Route>
                     <Route path="stock" element={<StockDetailResponsive />}></Route>
+                    <Route path="output" element={<OutputStockResponsive />}></Route>
                   </Route>
                 </Routes>
               </PrivateRouter>

@@ -133,7 +133,11 @@ const UploadStock = () => {
     <section className="_uploadStock-container">
       <ModalUpload />
       <h2>Cargar Inventario</h2>
-      <input type='file' onChange={handleFile}/>
+      <Button variant="contained">
+      <UploadIcon />
+      <label for="files" style={{cursor: 'pointer'}}>Cargar archivo DICO</label>
+      <input id="files" type='file' style={{visibility: 'hidden', position: 'absolute'}} onChange={handleFile}/>
+      </Button>
       <TabContext value={category}>
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
           <TabList aria-label="basic tabs example" onChange={handleTab}>

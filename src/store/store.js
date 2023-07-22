@@ -8,6 +8,8 @@ import tableStockSlice from './tableStock/tableStockSlice'
 import toastSlice from './toast/toastSlice'
 import uploadStockSlice from './uploadStock/uploadStock'
 import inboxStockSlice from './inboxStock/inboxStockSlice'
+import outputStockSlice from './outputStock/outputStockSlice'
+import stepperStockSlice from './stepperStock/stepperStockSlice'
 
 export default configureStore({
   reducer: {
@@ -19,6 +21,8 @@ export default configureStore({
     toast: toastSlice,
     summaryStock: summaryStockSlice,
     modal: modalSlice,
-    inboxStock: inboxStockSlice
+    inboxStock: inboxStockSlice,
+    outputStock: outputStockSlice,
+    stepperStock: stepperStockSlice
   },
 })

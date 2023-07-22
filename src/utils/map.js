@@ -84,6 +84,12 @@ export const mapUsers = (users) => {
     label: user.nombre
   }))
 }
+export const mapWorks = (works) => {
+  return works.map((work) => ({
+    id: work.id,
+    label: work.tipoTrabajo
+  }))
+}
 
 export const mapItemsToAssign = (idsSelected) => {
   return async (dispatch,getState) => {

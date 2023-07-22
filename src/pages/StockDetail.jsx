@@ -83,7 +83,11 @@ const StockDetail = () => {
         {
           stockItemsSelected.length > 0 &&
         <Fab 
-          variant="extended" 
+          variant="extended"
+          color="primary"
+          sx={{
+            marginTop: '20px'
+          }}
           onClick={() => {
             navigate('/admin/assign')
           }}>

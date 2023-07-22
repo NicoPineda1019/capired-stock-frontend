@@ -18,6 +18,7 @@ import SummarizeIcon from '@mui/icons-material/Summarize';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import UploadIcon from '@mui/icons-material/Upload';
 import LogoutIcon from '@mui/icons-material/Logout';
+import OutboxIcon from '@mui/icons-material/Outbox';
 import { Auth } from "../context/auth";
 import { useNavigate } from "react-router-dom";
 import { ADMIN_ROLE, TECH_ROLE } from "../constants";
@@ -32,6 +33,11 @@ const techRoutes = [
     label: "Bandeja de Entrada",
     path: "inbox",
     icon: <InboxIcon/>
+  },
+  {
+    label: "Consumo",
+    path: "output",
+    icon: <OutboxIcon/>
   }
 ]
 const adminRoutes = [
