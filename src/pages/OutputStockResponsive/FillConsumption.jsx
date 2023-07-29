@@ -34,6 +34,7 @@ const FillConsumption = () => {
       >
         <Autocomplete
           id="work"
+          size="small"
           value={!work.id ? null : work}
           isOptionEqualToValue={(a, b) => a.id === b.id}
           options={works}
@@ -43,19 +44,40 @@ const FillConsumption = () => {
           )}
         />
         <TextField
+          size="small"
           value={accountNumber}
           onChange={(e) => dispatch(updateAccountNumber(e.target.value))}
           label="Número de cuenta"
+          InputProps={{
+            inputProps: {
+              maxLength: 9,
+            }
+          }}
+
         />
         <TextField
+          size="small"
           value={workOrder}
           onChange={(e) => dispatch(updateWorkOrder(e.target.value))}
           label="Orden de trabajo"
+          InputProps={{
+            inputProps: {
+              maxLength: 25,
+            }
+          }}
+
         />
         <TextField
+          size="small"
           value={node}
           onChange={(e) => dispatch(updateNode(e.target.value))}
           label="Nodo"
+          InputProps={{
+            inputProps: {
+              maxLength: 10,
+            }
+          }}
+
         />
         <Box sx={{ mb: 2 }}>
           <Button

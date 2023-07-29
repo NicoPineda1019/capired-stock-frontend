@@ -1,6 +1,7 @@
 import React, { useContext } from 'react'
 import { Auth } from '../context/auth'
 import { Navigate, Outlet } from 'react-router-dom'
+import "../services/interceptor"
 
 const PrivateRouter = ({children}) => {
     const auth = useContext(Auth)

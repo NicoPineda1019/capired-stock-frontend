@@ -30,7 +30,6 @@ const Login = ({ setAuth }) => {
     if (auth?.sesion?.isValid()) {
       const groups = auth.sesion?.accessToken?.payload["cognito:groups"];
       const path = validateRol(groups);
-      console.log('path', path)
       navigate(path);
     }
   }, [auth, navigate]);

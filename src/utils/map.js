@@ -1,5 +1,6 @@
 import { Chip, Stack } from "@mui/material";
 import { updateItemsSelected } from "../store/assignStock/assignStockSlice";
+import { STATES } from "../constants";
 const moment = require('moment-timezone');
 const timeZone = 'America/Bogota'
 
@@ -32,12 +33,16 @@ export const mapPostStock = (items) => {
   }))
 };
 
-export const mapUpdateStock = (items, status, userId) => {
+export const mapUpdateStock = (items, status, userId, otherFields) => {
   const dateNow = moment().tz(timeZone)
   const updateDate = dateNow.format("YYYY-MM-DD")
   const updateTime = dateNow.format("HH:mm:ss")
   const ids = items.map((item) => item.id).join(",");
   return {
+    account:otherFields?.accountNumber,
+    idWork:otherFields?.work.id,
+    workOrder:otherFields?.workOrder,
+    node:otherFields?.node,
     fechaActualizacion: updateDate,
     horaActualizacion: updateTime,
     idEstado: status,
@@ -45,7 +50,7 @@ export const mapUpdateStock = (items, status, userId) => {
     id: ids
   }
 }
-export const mapUpdateStockNoSerializable = (items, status, userId, operator = '+') => {
+export const mapUpdateStockNoSerializable = (items, status, userId, operator = '+',otherFields) => {
   const dateNow = moment().tz(timeZone)
   const updateDate = dateNow.format("YYYY-MM-DD")
   const updateTime = dateNow.format("HH:mm:ss")
@@ -53,7 +58,13 @@ export const mapUpdateStockNoSerializable = (items, status, userId, operator = '
     idMaterial: item.id.id ?? item.id_material,
     cantidad: operator === '-' ? -Number(item.nuevaCantidad ?? item.cantidad) : Number(item.nuevaCantidad ?? item.cantidad)
   }))
+  const skipUpdateAcumulator = status === STATES.CONSUMIDO ? true:undefined
   return {
+    skipUpdateAcumulator,
+    account:otherFields?.accountNumber,
+    idWork:otherFields?.work.id,
+    workOrder:otherFields?.workOrder,
+    node:otherFields?.node,
     fechaActualizacion: updateDate,
     horaActualizacion: updateTime,
     idEstado: status,
@@ -155,13 +166,23 @@ export const mapColsTableStock = (category, _status) => {
   });
   if (isConsumed) {
     cols.push({
-      field: "ot_number",
-      headerName: "Número OT",
+      field: "work",
+      headerName: "Tipo de trabajo",
       width: 220,
     });
     cols.push({
-      field: "account_number",
+      field: "account",
       headerName: "Número Cuenta",
+      width: 220,
+    });
+    cols.push({
+      field: "work_order",
+      headerName: "Orden de trabajo",
+      width: 220,
+    });
+    cols.push({
+      field: "node",
+      headerName: "Nodo",
       width: 220,
     });
   }
