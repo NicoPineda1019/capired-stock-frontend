@@ -38,7 +38,7 @@ const AccordionStock = ({ items, configurations }) => {
     }))
   }
   const handleNewQuantity = (e, currentItem) => {
-    let value = e.target.value > currentItem.cantidad || e.target.value <= 0 ? currentItem.cantidad : e.target.value;
+    let value = e.target.value > currentItem.cantidad || e.target.value < 0 ? currentItem.cantidad : e.target.value;
     dispatch(updateItemsStock({
       ...currentItem,
       nuevaCantidad: value

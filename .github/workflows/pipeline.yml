@@ -1,0 +1,43 @@
+name: CI-capired-stock-frontend
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+
+jobs:
+  deployDEV:
+    if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    env: 
+      CI: false
+    strategy:
+      matrix:
+        node-version: [18.x]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Install dependencies
+        run: npm install
+      - name: Build React App
+        run: npm run build
+      - name: Deploy app build to S3 bucket
+        run: aws s3 sync build s3://capired-stock-frontend --delete
+
+      - name: invalidate
+        run: |
+            aws cloudfront create-invalidation \
+            --distribution-id ${AWS_CF_DISTRIBUTION_ID} \
+            --paths "/*"
+        env:
+          AWS_CF_DISTRIBUTION_ID: ${{ secrets.AWS_CF_DISTRIBUTION_ID }}

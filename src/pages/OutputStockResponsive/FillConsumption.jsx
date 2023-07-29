@@ -48,6 +48,7 @@ const FillConsumption = () => {
           value={accountNumber}
           onChange={(e) => dispatch(updateAccountNumber(e.target.value))}
           label="Número de cuenta"
+          type="number"
           InputProps={{
             inputProps: {
               maxLength: 9,
