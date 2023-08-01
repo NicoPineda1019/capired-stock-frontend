@@ -8,14 +8,12 @@ import {
   FormControl,
   FormGroup,
   IconButton,
-  Input,
   InputLabel,
   OutlinedInput,
   Tab,
 } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
 import UploadIcon from "@mui/icons-material/Upload";
-import { green } from "@mui/material/colors";
 import AddIcon from "@mui/icons-material/Add";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -43,19 +41,10 @@ import ModalUpload from "../components/ModalUpload";
 const UploadStock = () => {
   const dispatch = useDispatch();
 
-  const { serializableStock, noSerializableStock, checkLoading, category } =
+  const { serializableStock, category } =
     useSelector((state) => state.uploadStock);
   const [enableUpload, setEnableUpload] = useState(false);
-  /*   const handleKey = (e) => {
-    if (!(e.target.tagName === "BODY")) return;
-    dispatch(
-      addItemSerializableStock([
-        {
-          serial: e.key,
-        },
-      ])
-    );
-  }; */
+
   const handleKey = useCallback(
     (e) => {
       if (!(e.target.tagName === "BODY" && category === "1")) return;
@@ -135,7 +124,7 @@ const UploadStock = () => {
       <h2>Cargar Inventario</h2>
       <Button variant="contained">
       <UploadIcon />
-      <label for="files" style={{cursor: 'pointer'}}>Cargar archivo DICO</label>
+      <label htmlFor="files" style={{cursor: 'pointer'}}>Cargar archivo DICO</label>
       <input id="files" type='file' style={{visibility: 'hidden', position: 'absolute'}} onChange={handleFile}/>
       </Button>
       <TabContext value={category}>

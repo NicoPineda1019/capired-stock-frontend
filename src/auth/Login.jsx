@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { authenticateUser, validateRol } from "./authService";
 import { Auth } from "../context/auth";
 import { useEffect } from "react";
@@ -8,15 +8,20 @@ import { setError, setPass, setUser } from "../store/login/loginSlice";
 import {
   Button,
   FormControl,
+  IconButton,
   Input,
   InputAdornment,
   InputLabel,
-  TextField,
+  OutlinedInput,
 } from "@mui/material";
 import AccountCircle from "@mui/icons-material/AccountCircle";
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 const Login = ({ setAuth }) => {
   const { user, pass, error } = useSelector((state) => state.login);
+  const [showPassword, setShowPassword] = useState(false);
+
   const auth = useContext(Auth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -26,6 +31,10 @@ const Login = ({ setAuth }) => {
     dispatch(authenticateUser(user, pass, setAuth));
   };
 
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
   useEffect(() => {
     if (auth?.sesion?.isValid()) {
       const groups = auth.sesion?.accessToken?.payload["cognito:groups"];
@@ -42,60 +51,6 @@ const Login = ({ setAuth }) => {
   }, [error, dispatch]);
 
   return (
-    /*         <div className="row container-box">
-            <div className="col-md-6 mx-auto p-0" style={{ marginTop: '10vh' }}>
-                <div className="card">
-                    <div className="login-box">
-                        <div className="login-snip">
-                            <div className='_login-logo'></div>
-                            <input id="tab-1" type="radio" name="tab" className="sign-in" /><label htmlFor="tab-1" className="tab">Login</label>
-                            <div className="login-space">
-                                <div className="login">
-                                    <div className="group">
-                                        <label htmlFor="user" className="label">Usuario</label>
-                                        <input
-                                            onChange={(e) => dispatch(setUser(e.target.value))}
-                                            id="user"
-                                            type="text"
-                                            className="input"
-                                            placeholder="Ingresa tu usuario" />
-                                    </div>
-                                    <div className="group">
-                                        <label htmlFor="pass" className="label">Contraseña</label>
-                                        <input
-                                            onChange={(e) => dispatch(setPass(e.target.value))}
-                                            id="pass"
-                                            type="password"
-                                            value={pass}
-                                            className="input"
-                                            data-type="password"
-                                            placeholder="Ingresa tu contraseña" />
-                                    </div>
-                                    <div className="group">
-                                        <input
-                                            type="submit"
-                                            className="button"
-                                            value="Ingresar"
-                                            disabled={!user || !pass}
-                                            onClick={handleLogin} />
-                                    </div>
-                                    {
-                                        error &&
-                                        <div className='group'>
-                                            <span className='_login-error'>Contraseña incorrecta</span>
-                                        </div>
-                                    }
-                                    <div className="hr"></div>
-                                    <div className="foot label">
-                                        <a href="/">¿Olvidaste tu contraseña?</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> */
     <section className="_login-container">
       <div className="_login-card">
         <h1>Iniciar Sesión</h1>
@@ -113,17 +68,35 @@ const Login = ({ setAuth }) => {
               </InputAdornment>
             }
           />
-          <TextField
-            sx={{
-              marginTop: "20px",
-            }}
+          <FormControl sx={{ marginTop: '20px'}}>
+          <InputLabel htmlFor="outlined-password-input">Contraseña</InputLabel>
+          <OutlinedInput
             id="outlined-password-input"
             placeholder="Escribe tú contraseña"
+            size="small"
             label="Contraseña"
-            type="password"
+            type={showPassword ? "text" : "password"}
             autoComplete="current-password"
             onChange={(e) => dispatch(setPass(e.target.value))}
+            error={error}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                  edge="end"
+                >
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            }
           />
+          {
+            error && 
+            <span className="_login-pass-error">Contraseña incorrecta</span>
+          }
+          </FormControl>
         </FormControl>
         <Button onClick={handleLogin} variant="contained" size="medium" fullWidth sx={{
             marginTop: '30px'

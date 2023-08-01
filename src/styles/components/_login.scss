@@ -104,10 +104,7 @@
 	padding:15px 20px;
 	border-radius:25px;
 }
-.login-space .group input[data-type="password"]{
-	text-security:circle;
-	-webkit-text-security:circle;
-}
+
 .login-space .group .label{
 	color:white;
 	font-size:12px;
@@ -189,6 +186,7 @@ color: #b3b3b3;
 input:disabled {
 	background: #b3b3b3 !important;
 }
-._login-error {
-	color: red;
+._login-pass-error {
+	color: #d32f2f;
+	font-weight: 500;
 }

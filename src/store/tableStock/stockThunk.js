@@ -5,9 +5,7 @@ import { setNoSerializableInfo, setNumberPage, setSerializableInfo } from "./tab
 export const getStockByStatus = (page, _status, user, pageSize, category) => {
     return async (dispatch, getState) => {
         const { categoryTab } = getState().tableStock
-        console.log('cat',category)
         const isSerializable = category ? category === "1" : categoryTab === "1";
-        console.log('is',isSerializable)
         const path = isSerializable ? '/stock/stock-serializable' : categoryTab === "2" ? "/stock/stock-no-serializable" : "";
         dispatch(openLoading())
         await getStock(path, {

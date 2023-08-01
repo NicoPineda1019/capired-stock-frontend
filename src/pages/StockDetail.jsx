@@ -41,6 +41,7 @@ const StockDetail = () => {
     dispatch(getStockByStatus(currentPage, statusTab));
   }, [currentPage, statusTab, dispatch, categoryTab]);
 
+  
   return (
     <section className="_stock-content">
       <div style={{ marginTop: "20px", width: "100%", height: '740px' }}>
@@ -49,7 +50,7 @@ const StockDetail = () => {
             <Box sx={{ borderBottom: 1 }}>
               <TabList
                 onChange={handleCategoryTab}
-                indicatorColor="secondary"
+                indicatorColor="primary"
                 textColor="inherit"
               >
                 <Tab label="SERIALIZABLE" value="1" />
@@ -63,12 +64,12 @@ const StockDetail = () => {
             <Box sx={{ borderBottom: 1 }}>
               <TabList
                 onChange={handleStatusTab}
-                indicatorColor="secondary"
+                indicatorColor="primary"
                 textColor="inherit"
               >
-                <Tab label="STOCK" value="1" />
-                <Tab label="ASIGNADO" value="2" />
-                <Tab label="CONSUMIDO" value="3" />
+                <Tab label="STOCK" value="1"/>
+                <Tab label="ASIGNADO" value="2" disabled={stockItemsSelected.length > 0}/>
+                <Tab label="CONSUMIDO" value="3" disabled={stockItemsSelected.length > 0}/>
               </TabList>
             </Box>
           </TabContext>
