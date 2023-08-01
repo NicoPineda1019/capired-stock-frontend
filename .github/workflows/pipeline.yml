@@ -1,5 +1,4 @@
 name: CI-capired-stock-frontend
-
 on:
   push:
     branches:
