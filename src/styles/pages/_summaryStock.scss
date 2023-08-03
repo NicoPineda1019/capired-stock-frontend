@@ -1,0 +1,39 @@
+._summaryStock-container {
+    @extend ._containers-generic;
+}
+
+._summaryStock-box-table {
+    width: 80%;
+    margin: auto;
+}
+._summaryStock-container-table {
+    overflow-y: scroll;
+    height: 70vh;
+    margin-top: 30px;
+}
+._summaryStock-box-dates {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+table {
+    position: relative;
+}
+thead {
+    color: white;
+    background-color: #000affba;
+    position: sticky;
+    top: 0px;
+}
+td, th {
+    text-align: center;
+    padding: 10px;
+}
+tbody {
+    background-color: rgb(245 245 245);
+    padding-top: 50px;
+}
+
+tr {
+    margin-bottom: 10px;
+}

@@ -1,0 +1,16 @@
+._uploadStock-container {
+    @extend ._containers-generic;
+}
+._uploadStock-form-row {
+    flex-direction: row !important;
+    margin-bottom: 10px !important;
+    gap: 10px;
+    flex-wrap: wrap;
+    width: 90%;
+    padding: 20px;
+}
+
+._uploadStock-upload-btn {
+    position: absolute !important;
+    bottom: 30px;
+}

@@ -1,0 +1,8 @@
+._outputStock-container {
+    @extend ._containers-card-responsive;
+}
+._containers-form {
+    @extend ._assignStock-form-row;
+    max-height: 45vh;
+    overflow-y: scroll;
+}
