@@ -38,6 +38,10 @@
     "styled-components": "^6.0.6",
     "web-vitals": "^2.1.4"
   },
+  "peerDependencies": {
+    "react": "^17.0.0 || ^18.0.0",
+    "react-dom": "^17.0.0 || ^18.0.0"
+  },
   "scripts": {
     "start": "env-cmd -f .env react-scripts start",
     "build": "env-cmd -f .env.prod react-scripts start",
