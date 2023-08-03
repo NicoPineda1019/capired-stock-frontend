@@ -53,6 +53,7 @@ const Login = ({ setAuth }) => {
   return (
     <section className="_login-container">
       <div className="_login-card">
+        {process.env.REACT_APP_ENV_MODE === 'dev' && <h3>AMBIENTE DESARROLLO</h3>}
         <h1>Iniciar Sesión</h1>
         <form>
         <FormControl margin="dense" variant="standard" fullWidth>
