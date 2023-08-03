@@ -13,7 +13,7 @@ jobs:
       CI: false
     strategy:
       matrix:
-        node-version: [18.19]
+        node-version: [18.16]
     steps:
       - uses: actions/checkout@v2
       - name: Configure AWS Credentials
